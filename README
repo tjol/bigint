@@ -19,10 +19,10 @@ CODE:
     manage the memory. When a function returns a bigint_tp, you have ownership
     of it. Free it with a call to bigint_free().
   - In general, the functions leave the arguments you pass in intact. The
-    exceptions are bigint_flipsign(), bigint_shift() and all functions with
-    named ..._inplace(). These consume their (first) bigint_tp argument and
-    return a bigint_tp, which may or may not be the same pointer. The pointer
-    you passed in is considered invalid.
+    exceptions are bigint_flipsign(), bigint_shift() and all functions named
+    ..._inplace(). These consume their (first) bigint_tp argument and return
+    a bigint_tp, which may or may not be the same pointer. The pointer you
+    passed in is considered invalid.
   - Integers are stored in 32-bit digits, in little-endian order, using two's
     complement arithmetic.
 

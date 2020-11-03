@@ -115,7 +115,7 @@ _BIGINT_INLINE bigint_tp bigint_shift(bigint_tp n, int32_t shift)
     else if (shift < 0) {
         // right shift
         shift = -shift;
-        uint32_t BIGINT_sign_bit = n->num[n->digits-1] & BIGINT_SIGN_BIT;
+        uint32_t sign_bit = n->num[n->digits-1] & BIGINT_SIGN_BIT;
         while (shift >= BIGINT_WIDTH_BITS) {
             shift -= BIGINT_WIDTH_BITS;
             memcpy(&n->num[0], &n->num[1], sizeof(uint32_t) * (--n->digits));
@@ -126,7 +126,7 @@ _BIGINT_INLINE bigint_tp bigint_shift(bigint_tp n, int32_t shift)
                 val |= ((uint64_t)n->num[i+1]) << BIGINT_WIDTH_BITS;
             else
                 // last digit
-                if (BIGINT_sign_bit) val |= -1ll & BIGINT_HIGH_MASK;
+                if (sign_bit) val |= -1ll & BIGINT_HIGH_MASK;
 
             n->num[i] = val >> shift;
         }
@@ -135,7 +135,7 @@ _BIGINT_INLINE bigint_tp bigint_shift(bigint_tp n, int32_t shift)
     } else {
         // left shift
         int shift_within_digit = shift % 32;
-        uint32_t BIGINT_sign_bit = n->num[n->digits-1] & BIGINT_SIGN_BIT;
+        uint32_t sign_bit = n->num[n->digits-1] & BIGINT_SIGN_BIT;
         uint32_t overflow = 0;
         for (unsigned int i = 0; i < n->digits; ++i) {
             uint64_t val = ((uint64_t)n->num[i] << shift_within_digit) | overflow;
@@ -144,7 +144,7 @@ _BIGINT_INLINE bigint_tp bigint_shift(bigint_tp n, int32_t shift)
         }
         // expand the number if needed
         int extra_digits = shift / 32;
-        uint32_t next_val = ((BIGINT_sign_bit ? -1l : 0) << shift_within_digit) | overflow;
+        uint32_t next_val = ((sign_bit ? -1l : 0) << shift_within_digit) | overflow;
         uint32_t current_sign_bit = n->num[n->digits-1] & BIGINT_SIGN_BIT;
         int have_overflow_digit = current_sign_bit ? (next_val != (uint32_t)-1l)
                                                    : (next_val != 0);
