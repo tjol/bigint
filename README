@@ -1,0 +1,38 @@
+BIG INTEGER LIBRARY IN C
+========================
+
+As an exercise, I wrote a simple bigint library in C. This started out as a
+solution to an integer square root challenge on Codewars.
+
+I do not recommend you use this library in your projects. There are better
+libraries to use if you need big integers. The algorithms work, but they
+may not be very efficient (especially division), and they might have bugs
+that the unit tests don't cover.
+
+Should you decide to use this code, you should know:
+
+MATHS:
+  - Division rounds to zero, not to negative infinity.
+
+CODE:
+  - The main type is bigint_tp. This is a pointer type, so you have to
+    manage the memory. When a function returns a bigint_tp, you have ownership
+    of it. Free it with a call to bigint_free().
+  - In general, the functions leave the arguments you pass in intact. The
+    exceptions are bigint_flipsign(), bigint_shift() and all functions with
+    named ..._inplace(). These consume their (first) bigint_tp argument and
+    return a bigint_tp, which may or may not be the same pointer. The pointer
+    you passed in is considered invalid.
+  - Integers are stored in 32-bit digits, in little-endian order, using two's
+    complement arithmetic.
+
+BUILD:
+  - using CMake. The usual way. Should work on any UNIX, probably won't work
+    on Windows without some modifications.
+
+TEST:
+  - The unit tests use Criterion (https://criterion.readthedocs.io/). Install
+    it if you want to run the tests (using make test)
+
+COPYRIGHT:
+  see COPYING
